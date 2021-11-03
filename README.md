@@ -5,7 +5,7 @@
 [![Test](https://github.com/uptick/pymyob/workflows/Test/badge.svg)](https://github.com/uptick/pymyob/actions?query=workflow%3ATest)
 [![Lint](https://github.com/uptick/pymyob/workflows/Lint/badge.svg)](https://github.com/uptick/pymyob/actions?query=workflow%3ALint)
 
-A Python API around [MYOB's AccountRight Live API](http://developer.myob.com/api/accountright/v2/).
+A Python API around [MYOB's AccountRight and Essentials APIs](http://developer.myob.com/api/accountright/v2/).
 
 ## Pre-getting started
 
@@ -117,6 +117,10 @@ taxcodes = comp.general_ledger.taxcode()
 
 # Obtain a list of inventory items.
 inventory = comp.inventory.item()
+
+# Use endswith, startswith, or substringof filters
+search_text = 'Acme'
+customers = comp.contacts.customer(raw_filter=f"substringof('{search_text}', CompanyName)")
 ```
 
 If you don't know what you're looking for, the reprs of most objects (eg. `myob`, `comp`, `comp.invoices` above) will yield info on what managers/methods are available.

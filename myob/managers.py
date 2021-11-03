@@ -90,7 +90,13 @@ class Manager:
                 if not response.headers.get('content-type', '').startswith('application/json'):
                     return response.content
 
-                return response.json()
+                try:
+                    return response.json()
+                except ValueError:
+                    # Handle possible empty string response to DELETE request
+                    if method == 'DELETE' and response.content == b'':
+                        return {}
+                    raise
             elif response.status_code == 201:
                 return response.json()
             elif response.status_code == 400:

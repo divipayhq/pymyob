@@ -28,6 +28,15 @@ ENDPOINTS = {
             (CRUD, 'Supplier/', 'supplier contact'),
         ],
     },
+    'Sale/CustomerPayment/': {
+        'name': 'customer_payments',
+        'methods': [
+            (ALL, '', 'sale customer payment'),
+            (GET, '', 'sale customer payment'),
+            (POST, '', 'sale customer payment'),
+            (DELETE, '', 'sale customer payment'),
+        ]
+    },
     'Sale/Invoice/': {
         'name': 'invoices',
         'methods': [
@@ -59,13 +68,19 @@ ENDPOINTS = {
             (CRUD, 'Account/', 'account'),
             (CRUD, 'Category/', 'cost center tracking category'),
             (CRUD, 'Job/', 'job'),
+            (ALL, 'JournalTransaction/', 'transaction journal'),
+            (GET, 'JournalTransaction/', 'transaction journal'),
         ]
     },
     'Inventory/': {
         'name': 'inventory',
         'methods': [
             (CRUD, 'Item/', 'inventory item'),
-            (CRUD, 'Location/', 'inventory location')
+            (ALL, 'ItemPriceMatrix/', 'inventory item price matrix'),
+            (GET, 'ItemPriceMatrix/', 'inventory item price matrix'),
+            (PUT, 'ItemPriceMatrix/', 'inventory item price matrix'),
+            (CRUD, 'Location/', 'inventory location'),
+            (CRUD, 'Adjustment/', 'inventory adjustment')
         ]
     },
     'Purchase/Order/': {
