@@ -544,22 +544,27 @@ class EndpointTests(TestCase):
         self.assertEndpointReached(self.companyfile.inventory.adjustment.post, {'data': DATA}, 'POST', f'/{CID}/Inventory/Adjustment/')
         self.assertEndpointReached(self.companyfile.inventory.adjustment.delete, {'uid': UID}, 'DELETE', f'/{CID}/Inventory/Adjustment/{UID}/')
 
-    def test_purchase_orders(self):
+    def test_purchase_order(self):
         self.assertEqual(repr(self.companyfile.purchase_orders), (
-            "Purchase_OrderManager:\n"
-            "                  all() - Return all purchase order types for an AccountRight company file.\n"
-            "       delete_item(uid) - Delete selected item type purchase order.\n"
-            "          get_item(uid) - Return selected item type purchase order.\n"
-            "                 item() - Return all item type purchase orders for an AccountRight company file.\n"
-            "        post_item(data) - Create new item type purchase order.\n"
-            "    put_item(uid, data) - Update selected item type purchase order."
+            "Purchase_OrdersManager:\n"
+            "    all() - Return all purchase order types for an AccountRight company file."
         ))
         self.assertEndpointReached(self.companyfile.purchase_orders.all, {}, 'GET', f'/{CID}/Purchase/Order/')
-        self.assertEndpointReached(self.companyfile.purchase_orders.item, {}, 'GET', f'/{CID}/Purchase/Order/Item/')
-        self.assertEndpointReached(self.companyfile.purchase_orders.get_item, {'uid': UID}, 'GET', f'/{CID}/Purchase/Order/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_orders.put_item, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Order/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_orders.post_item, {'data': DATA}, 'POST', f'/{CID}/Purchase/Order/Item/')
-        self.assertEndpointReached(self.companyfile.purchase_orders.delete_item, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Order/Item/{UID}/')
+
+    def test_purchase_order_item(self):
+        self.assertEqual(repr(self.companyfile.purchase_orders.item), (
+            "ItemManager:\n"
+            "             all() - Return all item type purchase orders for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected item type purchase order.\n"
+            "          get(uid) - Return selected item type purchase order.\n"
+            "        post(data) - Create new item type purchase order.\n"
+            "    put(uid, data) - Update selected item type purchase order."
+        ))
+        self.assertEndpointReached(self.companyfile.purchase_orders.item.all, {}, 'GET', f'/{CID}/Purchase/Order/Item/')
+        self.assertEndpointReached(self.companyfile.purchase_orders.item.get, {'uid': UID}, 'GET', f'/{CID}/Purchase/Order/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_orders.item.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Order/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_orders.item.post, {'data': DATA}, 'POST', f'/{CID}/Purchase/Order/Item/')
+        self.assertEndpointReached(self.companyfile.purchase_orders.item.delete, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Order/Item/{UID}/')
 
     def test_purchase_bills(self):
         self.assertEqual(repr(self.companyfile.purchase_bills), (
@@ -597,6 +602,58 @@ class EndpointTests(TestCase):
         self.assertEndpointReached(self.companyfile.purchase_bills.put_miscellaneous, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
         self.assertEndpointReached(self.companyfile.purchase_bills.post_miscellaneous, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Miscellaneous/')
         self.assertEndpointReached(self.companyfile.purchase_bills.delete_miscellaneous, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
+
+    def test_purchase_bills(self):
+        self.assertEqual(repr(self.companyfile.purchase_bills), (
+            "Purchase_BillsManager:\n"
+            "    all() - Return all purchase bill types for an AccountRight company file."
+        ))
+        self.assertEndpointReached(self.companyfile.purchase_bills.all, {}, 'GET', f'/{CID}/Purchase/Bill/')
+
+    def test_purchase_bills_item(self):
+        self.assertEqual(repr(self.companyfile.purchase_bills.item), (
+            "ItemManager:\n"
+            "             all() - Return all item type purchase bills for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected item type purchase bill.\n"
+            "          get(uid) - Return selected item type purchase bill.\n"
+            "        post(data) - Create new item type purchase bill.\n"
+            "    put(uid, data) - Update selected item type purchase bill."
+        ))
+        self.assertEndpointReached(self.companyfile.purchase_bills.item.all, {}, 'GET', f'/{CID}/Purchase/Bill/Item/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.item.get, {'uid': UID}, 'GET', f'/{CID}/Purchase/Bill/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.item.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.item.post, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Item/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.item.delete, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Item/{UID}/')
+
+    def test_purchase_bills_service(self):
+        self.assertEqual(repr(self.companyfile.purchase_bills.service), (
+            "ServiceManager:\n"
+            "             all() - Return all service type purchase bills for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected service type purchase bill.\n"
+            "          get(uid) - Return selected service type purchase bill.\n"
+            "        post(data) - Create new service type purchase bill.\n"
+            "    put(uid, data) - Update selected service type purchase bill."
+        ))
+        self.assertEndpointReached(self.companyfile.purchase_bills.service.all, {}, 'GET', f'/{CID}/Purchase/Bill/Service/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.service.get, {'uid': UID}, 'GET', f'/{CID}/Purchase/Bill/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.service.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.service.post, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Service/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.service.delete, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Service/{UID}/')
+
+    def test_purchase_bills_miscellaneous(self):
+        self.assertEqual(repr(self.companyfile.purchase_bills.miscellaneous), (
+            "MiscellaneousManager:\n"
+            "             all() - Return all miscellaneous type purchase bills for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected miscellaneous type purchase bill.\n"
+            "          get(uid) - Return selected miscellaneous type purchase bill.\n"
+            "        post(data) - Create new miscellaneous type purchase bill.\n"
+            "    put(uid, data) - Update selected miscellaneous type purchase bill."
+        ))
+        self.assertEndpointReached(self.companyfile.purchase_bills.miscellaneous.all, {}, 'GET', f'/{CID}/Purchase/Bill/Miscellaneous/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.miscellaneous.get, {'uid': UID}, 'GET', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.miscellaneous.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.miscellaneous.post, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Miscellaneous/')
+        self.assertEndpointReached(self.companyfile.purchase_bills.miscellaneous.delete, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
 
     def test_company(self):
         self.assertEqual(repr(self.companyfile.company), (

@@ -174,22 +174,40 @@ ENDPOINTS = {
             }
         }
     },
-    # 'Purchase/Order/': {
-    #     'name': 'purchase_orders',
-    #     'methods': [
-    #         (ALL, '', 'purchase order type'),
-    #         (CRUD, 'Item/', 'item type purchase order'),
-    #     ]
-    # },
-    # 'Purchase/Bill/': {
-    #     'name': 'purchase_bills',
-    #     'methods': [
-    #         (ALL, '', 'purchase bill type'),
-    #         (CRUD, 'Item/', 'item type purchase bill'),
-    #         (CRUD, 'Service/', 'service type purchase bill'),
-    #         (CRUD, 'Miscellaneous/', 'miscellaneous type purchase bill'),
-    #     ]
-    # },
+    'Purchase/Order/': {
+        'name': 'Purchase_Orders',
+        'hint': 'purchase order type',
+        'methods': [ALL],
+        'resources': {
+            'Item/': {
+                'name': 'Item',
+                'hint': 'item type purchase order',
+                'methods': [CRUD]
+            }
+        }
+    },
+    'Purchase/Bill/': {
+        'name': 'Purchase_Bills',
+        'hint': 'purchase bill type',
+        'methods': [ALL],
+        'resources': {
+            'Item/': {
+                'name': 'Item',
+                'hint': 'item type purchase bill',
+                'methods': [CRUD]
+            },
+            'Service/': {
+                'name': 'Service',
+                'hint': 'service type purchase bill',
+                'methods': [CRUD]
+            },
+            'Miscellaneous/': {
+                'name': 'Miscellaneous',
+                'hint': 'miscellaneous type purchase bill',
+                'methods': [CRUD]
+            }
+        }
+    },
     # 'Company/': {
     #     'name': 'company',
     #     'methods': [
