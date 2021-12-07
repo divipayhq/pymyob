@@ -290,6 +290,11 @@ class EndpointTests(TestCase):
             "        post(data) - Create new service type sale invoice.\n"
             "    put(uid, data) - Update selected service type sale invoice."
         ))
+        self.assertEndpointReached(self.companyfile.invoices.service.all, {}, 'GET', f'/{CID}/Sale/Invoice/Service/')
+        self.assertEndpointReached(self.companyfile.invoices.service.get, {'uid': UID}, 'GET', f'/{CID}/Sale/Invoice/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.invoices.service.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Invoice/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.invoices.service.post, {'data': DATA}, 'POST', f'/{CID}/Sale/Invoice/Service/')
+        self.assertEndpointReached(self.companyfile.invoices.service.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Invoice/Service/{UID}/')
 
     def test_customer_payments(self):
         self.assertEqual(repr(self.companyfile.customer_payments), (
@@ -447,47 +452,6 @@ class EndpointTests(TestCase):
         self.assertEndpointReached(self.companyfile.general_ledger.journaltransaction.all, {}, 'GET', f'/{CID}/GeneralLedger/JournalTransaction/')
         self.assertEndpointReached(self.companyfile.general_ledger.journaltransaction.get, {'uid': UID}, 'GET', f'/{CID}/GeneralLedger/JournalTransaction/{UID}/')
 
-    def test_inventory(self):
-        self.assertEqual(repr(self.companyfile.inventory), (
-            "InventoryManager:\n"
-            "                      adjustment() - Return all inventory adjustments for an AccountRight company file.\n"
-            "            delete_adjustment(uid) - Delete selected inventory adjustment.\n"
-            "                  delete_item(uid) - Delete selected inventory item.\n"
-            "              delete_location(uid) - Delete selected inventory location.\n"
-            "               get_adjustment(uid) - Return selected inventory adjustment.\n"
-            "                     get_item(uid) - Return selected inventory item.\n"
-            "          get_itempricematrix(uid) - Return selected inventory item price matrix.\n"
-            "                 get_location(uid) - Return selected inventory location.\n"
-            "                            item() - Return all inventory items for an AccountRight company file.\n"
-            "                 itempricematrix() - Return all inventory item price matrices for an AccountRight company file.\n"
-            "                        location() - Return all inventory locations for an AccountRight company file.\n"
-            "             post_adjustment(data) - Create new inventory adjustment.\n"
-            "                   post_item(data) - Create new inventory item.\n"
-            "               post_location(data) - Create new inventory location.\n"
-            "         put_adjustment(uid, data) - Update selected inventory adjustment.\n"
-            "               put_item(uid, data) - Update selected inventory item.\n"
-            "    put_itempricematrix(uid, data) - Update selected inventory item price matrix.\n"
-            "           put_location(uid, data) - Update selected inventory location."
-        ))
-        self.assertEndpointReached(self.companyfile.inventory.item, {}, 'GET', f'/{CID}/Inventory/Item/')
-        self.assertEndpointReached(self.companyfile.inventory.get_item, {'uid': UID}, 'GET', f'/{CID}/Inventory/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.put_item, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Inventory/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.post_item, {'data': DATA}, 'POST', f'/{CID}/Inventory/Item/')
-        self.assertEndpointReached(self.companyfile.inventory.delete_item, {'uid': UID}, 'DELETE', f'/{CID}/Inventory/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.itempricematrix, {}, 'GET', f'/{CID}/Inventory/ItemPriceMatrix/')
-        self.assertEndpointReached(self.companyfile.inventory.get_itempricematrix, {'uid': UID}, 'GET', f'/{CID}/Inventory/ItemPriceMatrix/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.put_itempricematrix, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Inventory/ItemPriceMatrix/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.location, {}, 'GET', f'/{CID}/Inventory/Location/')
-        self.assertEndpointReached(self.companyfile.inventory.get_location, {'uid': UID}, 'GET', f'/{CID}/Inventory/Location/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.put_location, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Inventory/Location/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.post_location, {'data': DATA}, 'POST', f'/{CID}/Inventory/Location/')
-        self.assertEndpointReached(self.companyfile.inventory.delete_location, {'uid': UID}, 'DELETE', f'/{CID}/Inventory/Location/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.adjustment, {}, 'GET', f'/{CID}/Inventory/Adjustment/')
-        self.assertEndpointReached(self.companyfile.inventory.get_adjustment, {'uid': UID}, 'GET', f'/{CID}/Inventory/Adjustment/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.put_adjustment, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Inventory/Adjustment/{UID}/')
-        self.assertEndpointReached(self.companyfile.inventory.post_adjustment, {'data': DATA}, 'POST', f'/{CID}/Inventory/Adjustment/')
-        self.assertEndpointReached(self.companyfile.inventory.delete_adjustment, {'uid': UID}, 'DELETE', f'/{CID}/Inventory/Adjustment/{UID}/')
-
     def test_inventory_item(self):
         self.assertEqual(repr(self.companyfile.inventory.item), (
             "ItemManager:\n"
@@ -565,43 +529,6 @@ class EndpointTests(TestCase):
         self.assertEndpointReached(self.companyfile.purchase_orders.item.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Order/Item/{UID}/')
         self.assertEndpointReached(self.companyfile.purchase_orders.item.post, {'data': DATA}, 'POST', f'/{CID}/Purchase/Order/Item/')
         self.assertEndpointReached(self.companyfile.purchase_orders.item.delete, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Order/Item/{UID}/')
-
-    def test_purchase_bills(self):
-        self.assertEqual(repr(self.companyfile.purchase_bills), (
-            "Purchase_BillManager:\n"
-            "                           all() - Return all purchase bill types for an AccountRight company file.\n"
-            "                delete_item(uid) - Delete selected item type purchase bill.\n"
-            "       delete_miscellaneous(uid) - Delete selected miscellaneous type purchase bill.\n"
-            "             delete_service(uid) - Delete selected service type purchase bill.\n"
-            "                   get_item(uid) - Return selected item type purchase bill.\n"
-            "          get_miscellaneous(uid) - Return selected miscellaneous type purchase bill.\n"
-            "                get_service(uid) - Return selected service type purchase bill.\n"
-            "                          item() - Return all item type purchase bills for an AccountRight company file.\n"
-            "                 miscellaneous() - Return all miscellaneous type purchase bills for an AccountRight company file.\n"
-            "                 post_item(data) - Create new item type purchase bill.\n"
-            "        post_miscellaneous(data) - Create new miscellaneous type purchase bill.\n"
-            "              post_service(data) - Create new service type purchase bill.\n"
-            "             put_item(uid, data) - Update selected item type purchase bill.\n"
-            "    put_miscellaneous(uid, data) - Update selected miscellaneous type purchase bill.\n"
-            "          put_service(uid, data) - Update selected service type purchase bill.\n"
-            "                       service() - Return all service type purchase bills for an AccountRight company file."
-        ))
-        self.assertEndpointReached(self.companyfile.purchase_bills.all, {}, 'GET', f'/{CID}/Purchase/Bill/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.item, {}, 'GET', f'/{CID}/Purchase/Bill/Item/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.get_item, {'uid': UID}, 'GET', f'/{CID}/Purchase/Bill/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.put_item, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.post_item, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Item/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.delete_item, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.service, {}, 'GET', f'/{CID}/Purchase/Bill/Service/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.get_service, {'uid': UID}, 'GET', f'/{CID}/Purchase/Bill/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.put_service, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.post_service, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Service/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.delete_service, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.miscellaneous, {}, 'GET', f'/{CID}/Purchase/Bill/Miscellaneous/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.get_miscellaneous, {'uid': UID}, 'GET', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.put_miscellaneous, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.post_miscellaneous, {'data': DATA}, 'POST', f'/{CID}/Purchase/Bill/Miscellaneous/')
-        self.assertEndpointReached(self.companyfile.purchase_bills.delete_miscellaneous, {'uid': UID}, 'DELETE', f'/{CID}/Purchase/Bill/Miscellaneous/{UID}/')
 
     def test_purchase_bills(self):
         self.assertEqual(repr(self.companyfile.purchase_bills), (

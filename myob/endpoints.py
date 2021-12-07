@@ -77,7 +77,7 @@ ENDPOINTS = {
                 'methods': [CRUD]
             },
             'Service/': {
-                'name': 'service',
+                'name': 'Service',
                 'hint': 'service type sale invoice',
                 'methods': [CRUD]
             }

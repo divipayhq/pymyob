@@ -97,4 +97,4 @@ class CompanyFile:
             )
 
     def __repr__(self):
-        return 'CompanyFile:\n    %s' % '\n    '.join(sorted(v['name'] for v in ENDPOINTS.values()))
+        return 'CompanyFile:\n    %s' % '\n    '.join(sorted(v['name'].lower() for v in ENDPOINTS.values()))
