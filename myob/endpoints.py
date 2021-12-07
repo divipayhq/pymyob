@@ -148,17 +148,32 @@ ENDPOINTS = {
             }
         },
     },
-    # 'Inventory/': {
-    #     'name': 'inventory',
-    #     'methods': [
-    #         (CRUD, 'Item/', 'inventory item'),
-    #         (ALL, 'ItemPriceMatrix/', 'inventory item price matrix'),
-    #         (GET, 'ItemPriceMatrix/', 'inventory item price matrix'),
-    #         (PUT, 'ItemPriceMatrix/', 'inventory item price matrix'),
-    #         (CRUD, 'Location/', 'inventory location'),
-    #         (CRUD, 'Adjustment/', 'inventory adjustment')
-    #     ]
-    # },
+    'Inventory/': {
+        'name': 'Inventory',
+        'hint': 'inventory',
+        'resources': {
+            'Item/': {
+                'name': 'Item',
+                'hint': 'inventory item',
+                'methods': [CRUD]
+            },
+            'ItemPriceMatrix/': {
+                'hint': 'inventory item price matrix',
+                'name': 'ItemPriceMatrix',
+                'methods': [ALL, GET, PUT]
+            },
+            'Location/': {
+                'name': 'Location',
+                'hint': 'inventory location',
+                'methods': [CRUD]
+            },
+            'Adjustment/': {
+                'name': 'Adjustment',
+                'hint': 'inventory adjustment',
+                'methods': [CRUD]
+            }
+        }
+    },
     # 'Purchase/Order/': {
     #     'name': 'purchase_orders',
     #     'methods': [
