@@ -208,12 +208,17 @@ ENDPOINTS = {
             }
         }
     },
-    # 'Company/': {
-    #     'name': 'company',
-    #     'methods': [
-    #         (ALL, 'Preferences/', 'company data file preference')
-    #     ]
-    # },
+    'Company/': {
+        'name': 'Company',
+        'hint': 'company',
+        'resources': {
+            'Preferences/': {
+                'name': 'Preferences',
+                'hint': 'company data file preference',
+                'methods': [ALL]
+            }
+        }
+    },
 }
 
 METHOD_MAPPING = {
