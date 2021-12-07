@@ -261,30 +261,35 @@ class EndpointTests(TestCase):
 
     def test_invoices(self):
         self.assertEqual(repr(self.companyfile.invoices), (
-            "Sale_InvoiceManager:\n"
-            "                     all() - Return all sale invoice types for an AccountRight company file.\n"
-            "          delete_item(uid) - Delete selected item type sale invoice.\n"
-            "       delete_service(uid) - Delete selected service type sale invoice.\n"
-            "             get_item(uid) - Return selected item type sale invoice.\n"
-            "          get_service(uid) - Return selected service type sale invoice.\n"
-            "                    item() - Return all item type sale invoices for an AccountRight company file.\n"
-            "           post_item(data) - Create new item type sale invoice.\n"
-            "        post_service(data) - Create new service type sale invoice.\n"
-            "       put_item(uid, data) - Update selected item type sale invoice.\n"
-            "    put_service(uid, data) - Update selected service type sale invoice.\n"
-            "                 service() - Return all service type sale invoices for an AccountRight company file."
+            "InvoicesManager:\n"
+            "    all() - Return all sale invoice types for an AccountRight company file."
         ))
         self.assertEndpointReached(self.companyfile.invoices.all, {}, 'GET', f'/{CID}/Sale/Invoice/')
-        self.assertEndpointReached(self.companyfile.invoices.item, {}, 'GET', f'/{CID}/Sale/Invoice/Item/')
-        self.assertEndpointReached(self.companyfile.invoices.get_item, {'uid': UID}, 'GET', f'/{CID}/Sale/Invoice/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.put_item, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Invoice/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.post_item, {'data': DATA}, 'POST', f'/{CID}/Sale/Invoice/Item/')
-        self.assertEndpointReached(self.companyfile.invoices.delete_item, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Invoice/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.service, {}, 'GET', f'/{CID}/Sale/Invoice/Service/')
-        self.assertEndpointReached(self.companyfile.invoices.get_service, {'uid': UID}, 'GET', f'/{CID}/Sale/Invoice/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.put_service, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Invoice/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.post_service, {'data': DATA}, 'POST', f'/{CID}/Sale/Invoice/Service/')
-        self.assertEndpointReached(self.companyfile.invoices.delete_service, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Invoice/Service/{UID}/')
+
+    def test_invoice_item(self):
+        self.assertEqual(repr(self.companyfile.invoices.item), (
+            "ItemManager:\n"
+            "             all() - Return all item type sale invoices for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected item type sale invoice.\n"
+            "          get(uid) - Return selected item type sale invoice.\n"
+            "        post(data) - Create new item type sale invoice.\n"
+            "    put(uid, data) - Update selected item type sale invoice."
+        ))
+        self.assertEndpointReached(self.companyfile.invoices.item.all, {}, 'GET', f'/{CID}/Sale/Invoice/Item/')
+        self.assertEndpointReached(self.companyfile.invoices.item.get, {'uid': UID}, 'GET', f'/{CID}/Sale/Invoice/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.invoices.item.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Invoice/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.invoices.item.post, {'data': DATA}, 'POST', f'/{CID}/Sale/Invoice/Item/')
+        self.assertEndpointReached(self.companyfile.invoices.item.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Invoice/Item/{UID}/')
+
+    def test_invoice_service(self):
+        self.assertEqual(repr(self.companyfile.invoices.service), (
+            "ServiceManager:\n"
+            "             all() - Return all service type sale invoices for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected service type sale invoice.\n"
+            "          get(uid) - Return selected service type sale invoice.\n"
+            "        post(data) - Create new service type sale invoice.\n"
+            "    put(uid, data) - Update selected service type sale invoice."
+        ))
 
     def test_customer_payments(self):
         self.assertEqual(repr(self.companyfile.customer_payments), (
@@ -301,57 +306,78 @@ class EndpointTests(TestCase):
 
     def test_quotes(self):
         self.assertEqual(repr(self.companyfile.quotes), (
-            "Sale_QuoteManager:\n"
-            "                     all() - Return all sale quote types for an AccountRight company file.\n"
-            "          delete_item(uid) - Delete selected item type sale quote.\n"
-            "       delete_service(uid) - Delete selected service type sale quote.\n"
-            "             get_item(uid) - Return selected item type sale quote.\n"
-            "          get_service(uid) - Return selected service type sale quote.\n"
-            "                    item() - Return all item type sale quotes for an AccountRight company file.\n"
-            "           post_item(data) - Create new item type sale quote.\n"
-            "        post_service(data) - Create new service type sale quote.\n"
-            "       put_item(uid, data) - Update selected item type sale quote.\n"
-            "    put_service(uid, data) - Update selected service type sale quote.\n"
-            "                 service() - Return all service type sale quotes for an AccountRight company file."
+            "QuotesManager:\n"
+            "    all() - Return all sale quote types for an AccountRight company file."
         ))
         self.assertEndpointReached(self.companyfile.quotes.all, {}, 'GET', f'/{CID}/Sale/Quote/')
-        self.assertEndpointReached(self.companyfile.quotes.item, {}, 'GET', f'/{CID}/Sale/Quote/Item/')
-        self.assertEndpointReached(self.companyfile.quotes.get_item, {'uid': UID}, 'GET', f'/{CID}/Sale/Quote/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.quotes.put_item, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Quote/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.quotes.post_item, {'data': DATA}, 'POST', f'/{CID}/Sale/Quote/Item/')
-        self.assertEndpointReached(self.companyfile.quotes.delete_item, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Quote/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.quotes.service, {}, 'GET', f'/{CID}/Sale/Quote/Service/')
-        self.assertEndpointReached(self.companyfile.quotes.get_service, {'uid': UID}, 'GET', f'/{CID}/Sale/Quote/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.quotes.put_service, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Quote/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.quotes.post_service, {'data': DATA}, 'POST', f'/{CID}/Sale/Quote/Service/')
-        self.assertEndpointReached(self.companyfile.quotes.delete_service, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Quote/Service/{UID}/')
+
+    def test_quote_item(self):
+        self.assertEqual(repr(self.companyfile.quotes.item), (
+            "ItemManager:\n"
+            "             all() - Return all item type sale quotes for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected item type sale quote.\n"
+            "          get(uid) - Return selected item type sale quote.\n"
+            "        post(data) - Create new item type sale quote.\n"
+            "    put(uid, data) - Update selected item type sale quote."
+        ))
+        self.assertEndpointReached(self.companyfile.quotes.item.all, {}, 'GET', f'/{CID}/Sale/Quote/Item/')
+        self.assertEndpointReached(self.companyfile.quotes.item.get, {'uid': UID}, 'GET', f'/{CID}/Sale/Quote/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.quotes.item.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Quote/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.quotes.item.post, {'data': DATA}, 'POST', f'/{CID}/Sale/Quote/Item/')
+        self.assertEndpointReached(self.companyfile.quotes.item.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Quote/Item/{UID}/')
+
+    def test_quote_service(self):
+        self.assertEqual(repr(self.companyfile.quotes.service), (
+            "ServiceManager:\n"
+            "             all() - Return all service type sale quotes for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected service type sale quote.\n"
+            "          get(uid) - Return selected service type sale quote.\n"
+            "        post(data) - Create new service type sale quote.\n"
+            "    put(uid, data) - Update selected service type sale quote."
+        ))
+        self.assertEndpointReached(self.companyfile.quotes.service.all, {}, 'GET', f'/{CID}/Sale/Quote/Service/')
+        self.assertEndpointReached(self.companyfile.quotes.service.get, {'uid': UID}, 'GET', f'/{CID}/Sale/Quote/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.quotes.service.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Quote/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.quotes.service.post, {'data': DATA}, 'POST', f'/{CID}/Sale/Quote/Service/')
+        self.assertEndpointReached(self.companyfile.quotes.service.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Quote/Service/{UID}/')
 
     def test_orders(self):
         self.assertEqual(repr(self.companyfile.orders), (
-            "Sale_OrderManager:\n"
-            "                     all() - Return all sale order types for an AccountRight company file.\n"
-            "          delete_item(uid) - Delete selected item type sale order.\n"
-            "       delete_service(uid) - Delete selected service type sale order.\n"
-            "             get_item(uid) - Return selected item type sale order.\n"
-            "          get_service(uid) - Return selected service type sale order.\n"
-            "                    item() - Return all item type sale orders for an AccountRight company file.\n"
-            "           post_item(data) - Create new item type sale order.\n"
-            "        post_service(data) - Create new service type sale order.\n"
-            "       put_item(uid, data) - Update selected item type sale order.\n"
-            "    put_service(uid, data) - Update selected service type sale order.\n"
-            "                 service() - Return all service type sale orders for an AccountRight company file."
+            "OrdersManager:\n"
+            "    all() - Return all sale order types for an AccountRight company file."
         ))
-        self.assertEndpointReached(self.companyfile.invoices.all, {}, 'GET', f'/{CID}/Sale/Invoice/')
-        self.assertEndpointReached(self.companyfile.invoices.item, {}, 'GET', f'/{CID}/Sale/Invoice/Item/')
-        self.assertEndpointReached(self.companyfile.invoices.get_item, {'uid': UID}, 'GET', f'/{CID}/Sale/Invoice/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.put_item, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Invoice/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.post_item, {'data': DATA}, 'POST', f'/{CID}/Sale/Invoice/Item/')
-        self.assertEndpointReached(self.companyfile.invoices.delete_item, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Invoice/Item/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.service, {}, 'GET', f'/{CID}/Sale/Invoice/Service/')
-        self.assertEndpointReached(self.companyfile.invoices.get_service, {'uid': UID}, 'GET', f'/{CID}/Sale/Invoice/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.put_service, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Invoice/Service/{UID}/')
-        self.assertEndpointReached(self.companyfile.invoices.post_service, {'data': DATA}, 'POST', f'/{CID}/Sale/Invoice/Service/')
-        self.assertEndpointReached(self.companyfile.invoices.delete_service, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Invoice/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.orders.all, {}, 'GET', f'/{CID}/Sale/Order/')
+
+    def test_order_item(self):
+        self.assertEqual(repr(self.companyfile.orders.item), (
+            "ItemManager:\n"
+            "             all() - Return all item type sale orders for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected item type sale order.\n"
+            "          get(uid) - Return selected item type sale order.\n"
+            "        post(data) - Create new item type sale order.\n"
+            "    put(uid, data) - Update selected item type sale order."
+        ))
+        self.assertEndpointReached(self.companyfile.orders.item.all, {}, 'GET', f'/{CID}/Sale/Order/Item/')
+        self.assertEndpointReached(self.companyfile.orders.item.get, {'uid': UID}, 'GET', f'/{CID}/Sale/Order/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.orders.item.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Order/Item/{UID}/')
+        self.assertEndpointReached(self.companyfile.orders.item.post, {'data': DATA}, 'POST', f'/{CID}/Sale/Order/Item/')
+        self.assertEndpointReached(self.companyfile.orders.item.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Order/Item/{UID}/')
+
+    def test_order_service(self):
+        self.assertEqual(repr(self.companyfile.orders.service), (
+            "ServiceManager:\n"
+            "             all() - Return all service type sale orders for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected service type sale order.\n"
+            "          get(uid) - Return selected service type sale order.\n"
+            "        post(data) - Create new service type sale order.\n"
+            "    put(uid, data) - Update selected service type sale order."
+        ))
+        self.assertEndpointReached(self.companyfile.orders.service.all, {}, 'GET', f'/{CID}/Sale/Order/Service/')
+        self.assertEndpointReached(self.companyfile.orders.service.get, {'uid': UID}, 'GET', f'/{CID}/Sale/Order/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.orders.service.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Sale/Order/Service/{UID}/')
+        self.assertEndpointReached(self.companyfile.orders.service.post, {'data': DATA}, 'POST', f'/{CID}/Sale/Order/Service/')
+        self.assertEndpointReached(self.companyfile.orders.service.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/Order/Service/{UID}/')
+
 
     def test_general_ledger(self):
         self.assertEqual(repr(self.companyfile.general_ledger), (

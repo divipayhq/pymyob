@@ -67,12 +67,12 @@ ENDPOINTS = {
         'methods': [ALL, GET, POST, DELETE]
     },
     'Sale/Invoice/': {
-        'hint': 'invoices',
-        'name': 'invoice',
+        'hint': 'sale invoice type',
+        'name': 'Invoices',
         'methods': [ALL],
         'resources': {
             'Item/': {
-                'name': 'item',
+                'name': 'Item',
                 'hint': 'item type sale invoice',
                 'methods': [CRUD]
             },
@@ -83,22 +83,40 @@ ENDPOINTS = {
             }
         }
     },
-    # 'Sale/Order/': {
-    #     'name': 'orders',
-    #     'methods': [
-    #         (ALL, '', 'sale order type'),
-    #         (CRUD, 'Item/', 'item type sale order'),
-    #         (CRUD, 'Service/', 'service type sale order'),
-    #     ]
-    # },
-    # 'Sale/Quote/': {
-    #     'name': 'quotes',
-    #     'methods': [
-    #         (ALL, '', 'sale quote type'),
-    #         (CRUD, 'Item/', 'item type sale quote'),
-    #         (CRUD, 'Service/', 'service type sale quote'),
-    #     ]
-    # },
+    'Sale/Order/': {
+        'name': 'Orders',
+        'hint': 'sale order type',
+        'methods': [ALL],
+        'resources': {
+            'Item/': {
+                'name': 'Item',
+                'hint': 'item type sale order',
+                'methods': [CRUD]
+            },
+            'Service/': {
+                'name': 'Service',
+                'hint': 'service type sale order',
+                'methods': [CRUD]
+            }
+        }
+    },
+    'Sale/Quote/': {
+        'name': 'Quotes',
+        'hint': 'sale quote type',
+        'methods': [ALL],
+        'resources': {
+            'Item/': {
+                'name': 'Item',
+                'hint': 'item type sale quote',
+                'methods': [CRUD]
+            },
+            'Service/': {
+                'name': 'Service',
+                'hint': 'service type sale quote',
+                'methods': [CRUD]
+            }
+        }
+    },
     # 'GeneralLedger/': {
     #     'name': 'general_ledger',
     #     'methods': [
