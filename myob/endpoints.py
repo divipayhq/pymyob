@@ -61,23 +61,28 @@ ENDPOINTS = {
             }
         }
     },
-    # 'Sale/CustomerPayment/': {
-    #     'name': 'customer_payments',
-    #     'methods': [
-    #         (ALL, '', 'sale customer payment'),
-    #         (GET, '', 'sale customer payment'),
-    #         (POST, '', 'sale customer payment'),
-    #         (DELETE, '', 'sale customer payment'),
-    #     ]
-    # },
-    # 'Sale/Invoice/': {
-    #     'name': 'invoices',
-    #     'methods': [
-    #         (ALL, '', 'sale invoice type'),
-    #         (CRUD, 'Item/', 'item type sale invoice'),
-    #         (CRUD, 'Service/', 'service type sale invoice'),
-    #     ]
-    # },
+    'Sale/CustomerPayment/': {
+        'name': 'Customer_Payments',
+        'hint': 'sale customer payment',
+        'methods': [ALL, GET, POST, DELETE]
+    },
+    'Sale/Invoice/': {
+        'hint': 'invoices',
+        'name': 'invoice',
+        'methods': [ALL],
+        'resources': {
+            'Item/': {
+                'name': 'item',
+                'hint': 'item type sale invoice',
+                'methods': [CRUD]
+            },
+            'Service/': {
+                'name': 'service',
+                'hint': 'service type sale invoice',
+                'methods': [CRUD]
+            }
+        }
+    },
     # 'Sale/Order/': {
     #     'name': 'orders',
     #     'methods': [

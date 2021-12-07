@@ -288,13 +288,16 @@ class EndpointTests(TestCase):
 
     def test_customer_payments(self):
         self.assertEqual(repr(self.companyfile.customer_payments), (
-            "Sale_CustomerPaymentManager:\n"
+            "Customer_PaymentsManager:\n"
             "          all() - Return all sale customer payments for an AccountRight company file.\n"
             "    delete(uid) - Delete selected sale customer payment.\n"
             "       get(uid) - Return selected sale customer payment.\n"
             "     post(data) - Create new sale customer payment."
         ))
         self.assertEndpointReached(self.companyfile.customer_payments.all, {}, 'GET', f'/{CID}/Sale/CustomerPayment/')
+        self.assertEndpointReached(self.companyfile.customer_payments.delete, {'uid': UID}, 'DELETE', f'/{CID}/Sale/CustomerPayment/{UID}/')
+        self.assertEndpointReached(self.companyfile.customer_payments.get, {'uid': UID}, 'GET', f'/{CID}/Sale/CustomerPayment/{UID}/')
+        self.assertEndpointReached(self.companyfile.customer_payments.post, {'data': DATA}, 'POST', f'/{CID}/Sale/CustomerPayment/')
 
     def test_quotes(self):
         self.assertEqual(repr(self.companyfile.quotes), (
