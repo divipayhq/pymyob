@@ -1,3 +1,4 @@
+from .constants import MYOB_BASE_URL
 from .credentials import PartnerCredentials
 from .endpoints import ALL, ENDPOINTS, GET
 from .managers import Manager
@@ -14,9 +15,15 @@ class Myob:
             )
         self.credentials = credentials
         self.companyfiles = CompanyFiles(credentials)
-        self._manager = Manager('', credentials, raw_endpoints=[
-            (GET, 'Info/', 'Return API build information for each individual endpoint.'),
-        ])
+        self._manager = Manager(
+            company_id=None,
+            parent_url=MYOB_BASE_URL,
+            path_name=None,
+            credentials=credentials,
+            raw_endpoints=[
+                (GET, 'Info/', 'Return API build information for each individual endpoint.'),
+            ]
+        )
 
     def info(self):
         return self._manager.info()
@@ -28,10 +35,16 @@ class Myob:
 class CompanyFiles:
     def __init__(self, credentials):
         self.credentials = credentials
-        self._manager = Manager('', self.credentials, raw_endpoints=[
-            (ALL, '', 'Return a list of company files.'),
-            (GET, '[id]/', 'List endpoints available for a company file.'),
-        ])
+        self._manager = Manager(
+            company_id=None,
+            credentials=self.credentials,
+            parent_url=MYOB_BASE_URL,
+            path_name=None,
+            raw_endpoints=[
+                (ALL, '', 'Return a list of company files.'),
+                (GET, '[id]/', 'List endpoints available for a company file.'),
+            ]
+        )
         self._manager.name = 'CompanyFile'
 
     def all(self):
@@ -45,7 +58,15 @@ class CompanyFiles:
             # on the GET endpoint. The only way we currently allow passing company_id is by setting it on the manager,
             # and we can't do that on init, as this is a manager for company files plural..
             # Reluctant to change manager code, as it would add confusion if the inner method let you override the company_id.
-            manager = Manager('', self.credentials, raw_endpoints=[(GET, '', '')], company_id=id)
+            manager = Manager(
+                company_id=id,
+                parent_url=MYOB_BASE_URL,
+                credentials=self.credentials,
+                path_name=None,
+                raw_endpoints=[
+                    (GET, '', '')
+                ]
+            )
             raw_companyfile = manager.get()['CompanyFile']
         else:
             raw_companyfile = {'Id': id}
@@ -61,8 +82,18 @@ class CompanyFile:
         self.name = raw.get('Name')
         self.data = raw  # Dump remaining raw data here.
         self.credentials = credentials
-        for k, v in ENDPOINTS.items():
-            setattr(self, v['name'], Manager(k, credentials, endpoints=v['methods'], company_id=self.id))
+        for path_name, resource in ENDPOINTS.items():
+            setattr(
+                self,
+                Manager.plain_name(path_name).lower(),
+                Manager(
+                    company_id=self.id,
+                    credentials=self.credentials,
+                    parent_url=f'{MYOB_BASE_URL}{self.id}/',
+                    path_name=path_name, resource=resource,
+                    is_tle=True
+                )
+            )
 
     def __repr__(self):
         return 'CompanyFile:\n    %s' % '\n    '.join(sorted(v['name'] for v in ENDPOINTS.values()))

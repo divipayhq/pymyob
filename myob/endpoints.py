@@ -11,100 +11,115 @@ METHOD_ORDER = [ALL, GET, POST, PUT, DELETE]
 
 ENDPOINTS = {
     'Banking/': {
-        'name': 'banking',
-        'methods': [
-            (ALL, '', 'banking type'),
-            (CRUD, 'SpendMoneyTxn/', 'spend money transaction'),
-            (CRUD, 'ReceiveMoneyTxn/', 'receive money transaction'),
-            (CRUD, 'TransferMoneyTxn/', 'transfer money transaction'),
-        ],
+        'hint': 'banking type',
+        'methods': [ALL],
+        'resources': {
+            'SpendMoneyTxn/': {
+                'hint': 'spend money transaction',
+                'methods': [CRUD],
+                'resources': {
+                    'Attachment/': {
+                        'hint': 'spend money transaction attachment',
+                        'methods': [ALL, DELETE, GET, POST]
+                    }
+                }
+            },
+            'ReceiveMoneyTxn/': {
+                'hint': 'receive money transaction',
+                'methods': [CRUD]
+            },
+            'TransferMoneyTxn/': {
+                'hint': 'transfer money transaction',
+                'methods': [CRUD]
+            }
+        }
     },
-    'Contact/': {
-        'name': 'contacts',
-        'methods': [
-            (ALL, '', 'contact type'),
-            (CRUD, 'Customer/', 'customer contact'),
-            (CRUD, 'Employee/', 'employee card'),
-            (CRUD, 'Supplier/', 'supplier contact'),
-        ],
-    },
-    'Sale/CustomerPayment/': {
-        'name': 'customer_payments',
-        'methods': [
-            (ALL, '', 'sale customer payment'),
-            (GET, '', 'sale customer payment'),
-            (POST, '', 'sale customer payment'),
-            (DELETE, '', 'sale customer payment'),
-        ]
-    },
-    'Sale/Invoice/': {
-        'name': 'invoices',
-        'methods': [
-            (ALL, '', 'sale invoice type'),
-            (CRUD, 'Item/', 'item type sale invoice'),
-            (CRUD, 'Service/', 'service type sale invoice'),
-        ]
-    },
-    'Sale/Order/': {
-        'name': 'orders',
-        'methods': [
-            (ALL, '', 'sale order type'),
-            (CRUD, 'Item/', 'item type sale order'),
-            (CRUD, 'Service/', 'service type sale order'),
-        ]
-    },
-    'Sale/Quote/': {
-        'name': 'quotes',
-        'methods': [
-            (ALL, '', 'sale quote type'),
-            (CRUD, 'Item/', 'item type sale quote'),
-            (CRUD, 'Service/', 'service type sale quote'),
-        ]
-    },
-    'GeneralLedger/': {
-        'name': 'general_ledger',
-        'methods': [
-            (CRUD, 'TaxCode/', 'tax code'),
-            (CRUD, 'Account/', 'account'),
-            (CRUD, 'Category/', 'cost center tracking category'),
-            (CRUD, 'Job/', 'job'),
-            (ALL, 'JournalTransaction/', 'transaction journal'),
-            (GET, 'JournalTransaction/', 'transaction journal'),
-        ]
-    },
-    'Inventory/': {
-        'name': 'inventory',
-        'methods': [
-            (CRUD, 'Item/', 'inventory item'),
-            (ALL, 'ItemPriceMatrix/', 'inventory item price matrix'),
-            (GET, 'ItemPriceMatrix/', 'inventory item price matrix'),
-            (PUT, 'ItemPriceMatrix/', 'inventory item price matrix'),
-            (CRUD, 'Location/', 'inventory location'),
-            (CRUD, 'Adjustment/', 'inventory adjustment')
-        ]
-    },
-    'Purchase/Order/': {
-        'name': 'purchase_orders',
-        'methods': [
-            (ALL, '', 'purchase order type'),
-            (CRUD, 'Item/', 'item type purchase order'),
-        ]
-    },
-    'Purchase/Bill/': {
-        'name': 'purchase_bills',
-        'methods': [
-            (ALL, '', 'purchase bill type'),
-            (CRUD, 'Item/', 'item type purchase bill'),
-            (CRUD, 'Service/', 'service type purchase bill'),
-            (CRUD, 'Miscellaneous/', 'miscellaneous type purchase bill'),
-        ]
-    },
-    'Company/': {
-        'name': 'company',
-        'methods': [
-            (ALL, 'Preferences/', 'company data file preference')
-        ]
-    },
+    # 'Contact/': {
+    #     'name': 'contacts',
+    #     'methods': [
+    #         (ALL, '', 'contact type'),
+    #         (CRUD, 'Customer/', 'customer contact'),
+    #         (CRUD, 'Employee/', 'employee card'),
+    #         (CRUD, 'Supplier/', 'supplier contact'),
+    #     ],
+    # },
+    # 'Sale/CustomerPayment/': {
+    #     'name': 'customer_payments',
+    #     'methods': [
+    #         (ALL, '', 'sale customer payment'),
+    #         (GET, '', 'sale customer payment'),
+    #         (POST, '', 'sale customer payment'),
+    #         (DELETE, '', 'sale customer payment'),
+    #     ]
+    # },
+    # 'Sale/Invoice/': {
+    #     'name': 'invoices',
+    #     'methods': [
+    #         (ALL, '', 'sale invoice type'),
+    #         (CRUD, 'Item/', 'item type sale invoice'),
+    #         (CRUD, 'Service/', 'service type sale invoice'),
+    #     ]
+    # },
+    # 'Sale/Order/': {
+    #     'name': 'orders',
+    #     'methods': [
+    #         (ALL, '', 'sale order type'),
+    #         (CRUD, 'Item/', 'item type sale order'),
+    #         (CRUD, 'Service/', 'service type sale order'),
+    #     ]
+    # },
+    # 'Sale/Quote/': {
+    #     'name': 'quotes',
+    #     'methods': [
+    #         (ALL, '', 'sale quote type'),
+    #         (CRUD, 'Item/', 'item type sale quote'),
+    #         (CRUD, 'Service/', 'service type sale quote'),
+    #     ]
+    # },
+    # 'GeneralLedger/': {
+    #     'name': 'general_ledger',
+    #     'methods': [
+    #         (CRUD, 'TaxCode/', 'tax code'),
+    #         (CRUD, 'Account/', 'account'),
+    #         (CRUD, 'Category/', 'cost center tracking category'),
+    #         (CRUD, 'Job/', 'job'),
+    #         (ALL, 'JournalTransaction/', 'transaction journal'),
+    #         (GET, 'JournalTransaction/', 'transaction journal'),
+    #     ]
+    # },
+    # 'Inventory/': {
+    #     'name': 'inventory',
+    #     'methods': [
+    #         (CRUD, 'Item/', 'inventory item'),
+    #         (ALL, 'ItemPriceMatrix/', 'inventory item price matrix'),
+    #         (GET, 'ItemPriceMatrix/', 'inventory item price matrix'),
+    #         (PUT, 'ItemPriceMatrix/', 'inventory item price matrix'),
+    #         (CRUD, 'Location/', 'inventory location'),
+    #         (CRUD, 'Adjustment/', 'inventory adjustment')
+    #     ]
+    # },
+    # 'Purchase/Order/': {
+    #     'name': 'purchase_orders',
+    #     'methods': [
+    #         (ALL, '', 'purchase order type'),
+    #         (CRUD, 'Item/', 'item type purchase order'),
+    #     ]
+    # },
+    # 'Purchase/Bill/': {
+    #     'name': 'purchase_bills',
+    #     'methods': [
+    #         (ALL, '', 'purchase bill type'),
+    #         (CRUD, 'Item/', 'item type purchase bill'),
+    #         (CRUD, 'Service/', 'service type purchase bill'),
+    #         (CRUD, 'Miscellaneous/', 'miscellaneous type purchase bill'),
+    #     ]
+    # },
+    # 'Company/': {
+    #     'name': 'company',
+    #     'methods': [
+    #         (ALL, 'Preferences/', 'company data file preference')
+    #     ]
+    # },
 }
 
 METHOD_MAPPING = {

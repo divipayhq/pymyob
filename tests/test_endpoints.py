@@ -18,6 +18,8 @@ from myob.exceptions import (
 CID = 'DummyCompanyId'
 UID = 'DummyResourceUid'
 DATA = {'dummy': 'data'}
+SMT = 'spendmoneytxn123'
+ATT = 'attachment123'
 
 
 class EndpointTests(TestCase):
@@ -142,39 +144,69 @@ class EndpointTests(TestCase):
     def test_banking(self):
         self.assertEqual(repr(self.companyfile.banking), (
             "BankingManager:\n"
-            "                              all() - Return all banking types for an AccountRight company file.\n"
-            "        delete_receivemoneytxn(uid) - Delete selected receive money transaction.\n"
-            "          delete_spendmoneytxn(uid) - Delete selected spend money transaction.\n"
-            "       delete_transfermoneytxn(uid) - Delete selected transfer money transaction.\n"
-            "           get_receivemoneytxn(uid) - Return selected receive money transaction.\n"
-            "             get_spendmoneytxn(uid) - Return selected spend money transaction.\n"
-            "          get_transfermoneytxn(uid) - Return selected transfer money transaction.\n"
-            "         post_receivemoneytxn(data) - Create new receive money transaction.\n"
-            "           post_spendmoneytxn(data) - Create new spend money transaction.\n"
-            "        post_transfermoneytxn(data) - Create new transfer money transaction.\n"
-            "     put_receivemoneytxn(uid, data) - Update selected receive money transaction.\n"
-            "       put_spendmoneytxn(uid, data) - Update selected spend money transaction.\n"
-            "    put_transfermoneytxn(uid, data) - Update selected transfer money transaction.\n"
-            "                  receivemoneytxn() - Return all receive money transactions for an AccountRight company file.\n"
-            "                    spendmoneytxn() - Return all spend money transactions for an AccountRight company file.\n"
-            "                 transfermoneytxn() - Return all transfer money transactions for an AccountRight company file."
+            "    all() - Return all banking types for an AccountRight company file."
         ))
         self.assertEndpointReached(self.companyfile.banking.all, {}, 'GET', f'/{CID}/Banking/')
-        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn, {}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/')
-        self.assertEndpointReached(self.companyfile.banking.get_spendmoneytxn, {'uid': UID}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.put_spendmoneytxn, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.post_spendmoneytxn, {'data': DATA}, 'POST', f'/{CID}/Banking/SpendMoneyTxn/')
-        self.assertEndpointReached(self.companyfile.banking.delete_spendmoneytxn, {'uid': UID}, 'DELETE', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.receivemoneytxn, {}, 'GET', f'/{CID}/Banking/ReceiveMoneyTxn/')
-        self.assertEndpointReached(self.companyfile.banking.get_receivemoneytxn, {'uid': UID}, 'GET', f'/{CID}/Banking/ReceiveMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.put_receivemoneytxn, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Banking/ReceiveMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.post_receivemoneytxn, {'data': DATA}, 'POST', f'/{CID}/Banking/ReceiveMoneyTxn/')
-        self.assertEndpointReached(self.companyfile.banking.delete_receivemoneytxn, {'uid': UID}, 'DELETE', f'/{CID}/Banking/ReceiveMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.transfermoneytxn, {}, 'GET', f'/{CID}/Banking/TransferMoneyTxn/')
-        self.assertEndpointReached(self.companyfile.banking.get_transfermoneytxn, {'uid': UID}, 'GET', f'/{CID}/Banking/TransferMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.put_transfermoneytxn, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Banking/TransferMoneyTxn/{UID}/')
-        self.assertEndpointReached(self.companyfile.banking.post_transfermoneytxn, {'data': DATA}, 'POST', f'/{CID}/Banking/TransferMoneyTxn/')
-        self.assertEndpointReached(self.companyfile.banking.delete_transfermoneytxn, {'uid': UID}, 'DELETE', f'/{CID}/Banking/TransferMoneyTxn/{UID}/')
+
+    def test_banking_receivemoneytxn(self):
+        self.assertEqual(repr(self.companyfile.banking.receivemoneytxn), (
+            "ReceiveMoneyTxnManager:\n"
+            "             all() - Return all receive money transactions for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected receive money transaction.\n"
+            "          get(uid) - Return selected receive money transaction.\n"
+            "        post(data) - Create new receive money transaction.\n"
+            "    put(uid, data) - Update selected receive money transaction."
+        ))
+
+        self.assertEndpointReached(self.companyfile.banking.receivemoneytxn.all, {}, 'GET', f'/{CID}/Banking/ReceiveMoneyTxn/')
+        self.assertEndpointReached(self.companyfile.banking.receivemoneytxn.get, {'uid': UID}, 'GET', f'/{CID}/Banking/ReceiveMoneyTxn/{UID}/')
+        self.assertEndpointReached(self.companyfile.banking.receivemoneytxn.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Banking/ReceiveMoneyTxn/{UID}/')
+        self.assertEndpointReached(self.companyfile.banking.receivemoneytxn.post, {'data': DATA}, 'POST', f'/{CID}/Banking/ReceiveMoneyTxn/')
+        self.assertEndpointReached(self.companyfile.banking.receivemoneytxn.delete, {'uid': UID}, 'DELETE', f'/{CID}/Banking/ReceiveMoneyTxn/{UID}/')
+
+    def test_banking_transfermoneytxn(self):
+        self.assertEqual(repr(self.companyfile.banking.transfermoneytxn), (
+            "TransferMoneyTxnManager:\n"
+            "             all() - Return all transfer money transactions for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected transfer money transaction.\n"
+            "          get(uid) - Return selected transfer money transaction.\n"
+            "        post(data) - Create new transfer money transaction.\n"
+            "    put(uid, data) - Update selected transfer money transaction."
+        ))
+        self.assertEndpointReached(self.companyfile.banking.transfermoneytxn.all, {}, 'GET', f'/{CID}/Banking/TransferMoneyTxn/')
+        self.assertEndpointReached(self.companyfile.banking.transfermoneytxn.get, {'uid': UID}, 'GET', f'/{CID}/Banking/TransferMoneyTxn/{UID}/')
+        self.assertEndpointReached(self.companyfile.banking.transfermoneytxn.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Banking/TransferMoneyTxn/{UID}/')
+        self.assertEndpointReached(self.companyfile.banking.transfermoneytxn.post, {'data': DATA}, 'POST', f'/{CID}/Banking/TransferMoneyTxn/')
+        self.assertEndpointReached(self.companyfile.banking.transfermoneytxn.delete, {'uid': UID}, 'DELETE', f'/{CID}/Banking/TransferMoneyTxn/{UID}/')
+
+    def test_banking_spendmoneytxn(self):
+        self.assertEqual(repr(self.companyfile.banking.spendmoneytxn), (
+            "SpendMoneyTxnManager:\n"
+            "             all() - Return all spend money transactions for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected spend money transaction.\n"
+            "          get(uid) - Return selected spend money transaction.\n"
+            "        post(data) - Create new spend money transaction.\n"
+            "    put(uid, data) - Update selected spend money transaction."
+        ))
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.all, {}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.get, {'uid': UID}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.post, {'data': DATA}, 'POST', f'/{CID}/Banking/SpendMoneyTxn/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.delete, {'uid': UID}, 'DELETE', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
+
+    def test_banking_spendmoneytxn_attachment(self):
+        self.assertEqual(repr(self.companyfile.banking.spendmoneytxn), (
+            "SpendMoneyTxnManager:\n"
+            "             all() - Return all spend money transactions for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected spend money transaction.\n"
+            "          get(uid) - Return selected spend money transaction.\n"
+            "        post(data) - Create new spend money transaction.\n"
+            "    put(uid, data) - Update selected spend money transaction."
+        ))
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.all, {'spendmoneytxn_uid': SMT}, f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.get, {'spendmoneytxn_uid': SMT, 'uid': ATT}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/{ATT}/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.delete, {'spendmoneytxn_uid': SMT, 'uid': ATT}, 'DELETE', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/{ATT}/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.post, {'spendmoneytxn_uid': SMT, 'data': DATA}, 'POST', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/')
 
     def test_contacts(self):
         self.assertEqual(repr(self.companyfile.contacts), (

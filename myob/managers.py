@@ -1,8 +1,11 @@
 import re
-import requests
 from datetime import date
+from typing import Optional, List, Dict
 
-from .constants import DEFAULT_PAGE_SIZE, MYOB_BASE_URL
+import requests
+
+from .constants import DEFAULT_PAGE_SIZE
+from .credentials import PartnerCredentials
 from .endpoints import CRUD, METHOD_MAPPING, METHOD_ORDER
 from .exceptions import (
     MyobBadRequest,
@@ -16,38 +19,91 @@ from .exceptions import (
 
 
 class Manager:
-    def __init__(self, name, credentials, company_id=None, endpoints=[], raw_endpoints=[]):
-        self.credentials = credentials
-        self.name = '_'.join(p for p in name.rstrip('/').split('/') if '[' not in p)
-        self.base_url = MYOB_BASE_URL
-        if company_id is not None:
-            self.base_url += company_id + '/'
-        if name:
-            self.base_url += name
-        self.method_details = {}
+    def __init__(
+        self,
+        company_id: Optional[str],
+        credentials: PartnerCredentials,
+        parent_url: str,
+        path_name: Optional[str],
+        resource: Optional[Dict] = None,
+        raw_endpoints: Optional[List] = None,
+        is_tle: Optional[bool] = False,
+    ):
+        """
+        :param company_id   The ID of the company to fetch credentials from.
+        :param credentials  The PartnerCredentials instance required to connect to Myob
+        :param parent_url   The fully qualified path up to the parent resource.
+                            A trailing slash is expected
+        :param path_name    The unique part of the URL to which this resource applies.
+                            A trailing slash is expected
+        :param resource     {
+                                methods: The methods available for this resource
+                                hint: the name applied to the help documentation
+                                resources: (Optional) nested child resources
+                            }
+        :param raw_endpoints Any endpoints that should be applied at the top level
+        """
+
         self.company_id = company_id
+        self.credentials = credentials
+        self.path_name = path_name
+        self.name = (Manager.plain_name(path_name) or "")
+        self.is_tle = is_tle
+        self.resource = resource or dict()
+        self.base_url = f'{parent_url}{path_name or ""}'
+        self.method_details = {}
 
         # Build ORM methods from given url endpoints.
-        for method, base, name in endpoints:
+        for method in self.resource.get('methods', []):
+
             if method == CRUD:
                 for m in METHOD_ORDER:
                     self.build_method(
                         m,
-                        METHOD_MAPPING[m]['endpoint'](base),
-                        METHOD_MAPPING[m]['hint'](name),
+                        METHOD_MAPPING[m]['endpoint'](""),
+                        METHOD_MAPPING[m]['hint'](self.resource.get("hint")),
                     )
             else:
                 self.build_method(
                     method,
-                    METHOD_MAPPING[method]['endpoint'](base),
-                    METHOD_MAPPING[method]['hint'](name),
+                    METHOD_MAPPING[method]['endpoint'](""),
+                    METHOD_MAPPING[method]['hint'](self.resource.get("hint")),
                 )
         # Build raw methods (ones where we don't want to tinker with the endpoint or hint)
-        for method, endpoint, hint in raw_endpoints:
+        for method, endpoint, hint in (raw_endpoints or []):
             self.build_method(method, endpoint, hint)
 
-    def build_method(self, method, endpoint, hint):
-        full_endpoint = self.base_url + endpoint
+        # Build out nested child resources
+        for path_name, resource in self.resource.get("resources", dict()).items():
+            setattr(
+                self,
+                Manager.plain_name(path_name).lower(),
+                Manager(
+                    company_id=self.company_id,
+                    credentials=self.credentials,
+                    parent_url=self.nested_url(),
+                    path_name=path_name,
+                    resource=resource
+                )
+            )
+
+
+    @staticmethod
+    def plain_name(name: Optional[str]) -> Optional[str]:
+        return '_'.join(p for p in name.rstrip('/').split('/') if '[' not in p) if name else None
+
+    def nested_url(self) -> str:
+        """
+        Given the resource held by this Manager, determine provide
+        the url which will act as the parent to them (when nested).
+        """
+        if self.is_tle:
+            return self.base_url
+
+        return f'{self.base_url}[{self.name.lower()}_uid]/'
+
+    def build_method(self, method: str, endpoint: Optional[str], hint: str):
+        full_endpoint = f'{self.base_url}{endpoint or ""}'
         url_keys = re.findall(r'\[([^\]]*)\]', full_endpoint)
         template = full_endpoint.replace('[', '{').replace(']', '}')
 
