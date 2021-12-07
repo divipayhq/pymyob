@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from unittest import TestCase
 
-from myob.constants import DEFAULT_PAGE_SIZE
+from myob.constants import DEFAULT_PAGE_SIZE, MYOB_BASE_URL
 from myob.credentials import PartnerCredentials
 from myob.managers import Manager
 
@@ -13,7 +13,7 @@ class QueryParamTests(TestCase):
             consumer_secret='TellNoOne',
             callback_uri='CallOnlyWhenCalledTo',
         )
-        self.manager = Manager('', credentials=cred)
+        self.manager = Manager(company_id=None, parent_url=MYOB_BASE_URL, path_name=None, credentials=cred)
 
     def assertParamsEqual(self, raw_kwargs, expected_params, method='GET'):
         self.assertEqual(
