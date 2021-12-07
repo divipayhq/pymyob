@@ -11,38 +11,56 @@ METHOD_ORDER = [ALL, GET, POST, PUT, DELETE]
 
 ENDPOINTS = {
     'Banking/': {
+        'name': 'Banking',
         'hint': 'banking type',
         'methods': [ALL],
         'resources': {
             'SpendMoneyTxn/': {
+                'name': 'SpendMoneyTxn',
                 'hint': 'spend money transaction',
                 'methods': [CRUD],
                 'resources': {
                     'Attachment/': {
+                        'name': 'Attachment',
                         'hint': 'spend money transaction attachment',
                         'methods': [ALL, DELETE, GET, POST]
                     }
                 }
             },
             'ReceiveMoneyTxn/': {
+                'name': 'ReceiveMoneyTxn',
                 'hint': 'receive money transaction',
                 'methods': [CRUD]
             },
             'TransferMoneyTxn/': {
+                'name': 'TransferMoneyTxn',
                 'hint': 'transfer money transaction',
                 'methods': [CRUD]
             }
         }
     },
-    # 'Contact/': {
-    #     'name': 'contacts',
-    #     'methods': [
-    #         (ALL, '', 'contact type'),
-    #         (CRUD, 'Customer/', 'customer contact'),
-    #         (CRUD, 'Employee/', 'employee card'),
-    #         (CRUD, 'Supplier/', 'supplier contact'),
-    #     ],
-    # },
+    'Contact/': {
+        'name': 'Contacts',
+        'hint': 'contact type',
+        'methods': [ALL],
+        'resources': {
+            'Customer/': {
+                'name': 'Customer',
+                'hint': 'customer contact',
+                'methods': [CRUD]
+            },
+            'Employee/': {
+                'name': 'Employee',
+                'hint': 'employee card',
+                'methods': [CRUD]
+            },
+            'Supplier/': {
+                'name': 'Supplier',
+                'hint': 'supplier contact',
+                'methods': [CRUD]
+            }
+        }
+    },
     # 'Sale/CustomerPayment/': {
     #     'name': 'customer_payments',
     #     'methods': [
@@ -124,23 +142,23 @@ ENDPOINTS = {
 
 METHOD_MAPPING = {
     ALL: {
-        'endpoint': lambda base: base,
+        'endpoint': lambda: '',
         'hint': lambda name: 'Return all %s for an AccountRight company file.' % pluralise(name)
     },
     GET: {
-        'endpoint': lambda base: base + '[uid]/',
+        'endpoint': lambda: '[uid]/',
         'hint': lambda name: 'Return selected %s.' % name
     },
     PUT: {
-        'endpoint': lambda base: base + '[uid]/',
+        'endpoint': lambda: '[uid]/',
         'hint': lambda name: 'Update selected %s.' % name
     },
     POST: {
-        'endpoint': lambda base: base,
+        'endpoint': lambda: '',
         'hint': lambda name: 'Create new %s.' % name
     },
     DELETE: {
-        'endpoint': lambda base: base + '[uid]/',
+        'endpoint': lambda: '[uid]/',
         'hint': lambda name: 'Delete selected %s.' % name
     },
 }

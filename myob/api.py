@@ -60,7 +60,7 @@ class CompanyFiles:
             # Reluctant to change manager code, as it would add confusion if the inner method let you override the company_id.
             manager = Manager(
                 company_id=id,
-                parent_url=MYOB_BASE_URL,
+                parent_url=f'{MYOB_BASE_URL}{id}/',
                 credentials=self.credentials,
                 path_name=None,
                 raw_endpoints=[
@@ -85,12 +85,13 @@ class CompanyFile:
         for path_name, resource in ENDPOINTS.items():
             setattr(
                 self,
-                Manager.plain_name(path_name).lower(),
+                resource.get("name").lower(),
                 Manager(
                     company_id=self.id,
                     credentials=self.credentials,
                     parent_url=f'{MYOB_BASE_URL}{self.id}/',
-                    path_name=path_name, resource=resource,
+                    path_name=path_name,
+                    resource=resource,
                     is_tle=True
                 )
             )

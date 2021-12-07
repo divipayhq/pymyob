@@ -47,37 +47,36 @@ class Manager:
         self.company_id = company_id
         self.credentials = credentials
         self.path_name = path_name
-        self.name = (Manager.plain_name(path_name) or "")
+        self.name = (resource or dict()).get("name")
         self.is_tle = is_tle
-        self.resource = resource or dict()
         self.base_url = f'{parent_url}{path_name or ""}'
         self.method_details = {}
 
         # Build ORM methods from given url endpoints.
-        for method in self.resource.get('methods', []):
+        for method in (resource or dict()).get('methods', []):
 
             if method == CRUD:
                 for m in METHOD_ORDER:
                     self.build_method(
                         m,
-                        METHOD_MAPPING[m]['endpoint'](""),
-                        METHOD_MAPPING[m]['hint'](self.resource.get("hint")),
+                        METHOD_MAPPING[m]['endpoint'](),
+                        METHOD_MAPPING[m]['hint'](resource.get("hint")),
                     )
             else:
                 self.build_method(
                     method,
-                    METHOD_MAPPING[method]['endpoint'](""),
-                    METHOD_MAPPING[method]['hint'](self.resource.get("hint")),
+                    METHOD_MAPPING[method]['endpoint'](),
+                    METHOD_MAPPING[method]['hint'](resource.get("hint")),
                 )
         # Build raw methods (ones where we don't want to tinker with the endpoint or hint)
         for method, endpoint, hint in (raw_endpoints or []):
             self.build_method(method, endpoint, hint)
 
         # Build out nested child resources
-        for path_name, resource in self.resource.get("resources", dict()).items():
+        for path_name, resource in (resource or dict()).get("resources", dict()).items():
             setattr(
                 self,
-                Manager.plain_name(path_name).lower(),
+                resource.get("name").lower(),
                 Manager(
                     company_id=self.company_id,
                     credentials=self.credentials,
@@ -86,11 +85,6 @@ class Manager:
                     resource=resource
                 )
             )
-
-
-    @staticmethod
-    def plain_name(name: Optional[str]) -> Optional[str]:
-        return '_'.join(p for p in name.rstrip('/').split('/') if '[' not in p) if name else None
 
     def nested_url(self) -> str:
         """

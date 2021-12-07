@@ -85,13 +85,13 @@ class EndpointTests(TestCase):
 
         # Empty response to DELETE returns empty dict
         mock_request.return_value.content = b''
-        result = self.companyfile.banking.delete_transfermoneytxn(uid=UID)
+        result = self.companyfile.banking.transfermoneytxn.delete(uid=UID)
         self.assertEqual(result, {})
 
         # JSON error from non-empty DELETE response gets raised
         mock_request.return_value.content = '{'
         with self.assertRaises(ValueError):
-            self.companyfile.banking.delete_transfermoneytxn(uid=UID)
+            self.companyfile.banking.transfermoneytxn.delete(uid=UID)
 
         # JSON error from non-DELETE request gets raised, regardless of content
         mock_request.return_value.content = b''
@@ -99,20 +99,20 @@ class EndpointTests(TestCase):
             self.companyfile.banking.all()
 
         with self.assertRaises(ValueError):
-            self.companyfile.banking.post_spendmoneytxn(data=DATA)
+            self.companyfile.banking.spendmoneytxn.post(data=DATA)
 
         with self.assertRaises(ValueError):
-            self.companyfile.banking.put_transfermoneytxn(uid=UID, data=DATA)
+            self.companyfile.banking.transfermoneytxn.post(uid=UID, data=DATA)
 
         mock_request.return_value.content = '{'
         with self.assertRaises(ValueError):
             self.companyfile.banking.all()
 
         with self.assertRaises(ValueError):
-            self.companyfile.banking.post_spendmoneytxn(data=DATA)
+            self.companyfile.banking.spendmoneytxn.post(data=DATA)
 
         with self.assertRaises(ValueError):
-            self.companyfile.banking.put_transfermoneytxn(uid=UID, data=DATA)
+            self.companyfile.banking.transfermoneytxn.put(uid=UID, data=DATA)
 
     def test_companyfiles(self):
         self.assertEqual(repr(self.myob.companyfiles), (
@@ -195,55 +195,69 @@ class EndpointTests(TestCase):
         self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.delete, {'uid': UID}, 'DELETE', f'/{CID}/Banking/SpendMoneyTxn/{UID}/')
 
     def test_banking_spendmoneytxn_attachment(self):
-        self.assertEqual(repr(self.companyfile.banking.spendmoneytxn), (
-            "SpendMoneyTxnManager:\n"
-            "             all() - Return all spend money transactions for an AccountRight company file.\n"
-            "       delete(uid) - Delete selected spend money transaction.\n"
-            "          get(uid) - Return selected spend money transaction.\n"
-            "        post(data) - Create new spend money transaction.\n"
-            "    put(uid, data) - Update selected spend money transaction."
+        self.assertEqual(repr(self.companyfile.banking.spendmoneytxn.attachment), (
+            "AttachmentManager:\n"
+            "            all(spendmoneytxn_uid) - Return all spend money transaction attachments for an AccountRight company file.\n"
+            "    delete(spendmoneytxn_uid, uid) - Delete selected spend money transaction attachment.\n"
+            "       get(spendmoneytxn_uid, uid) - Return selected spend money transaction attachment.\n"
+            "     post(spendmoneytxn_uid, data) - Create new spend money transaction attachment."
         ))
-        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.all, {'spendmoneytxn_uid': SMT}, f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/')
+        self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.all, {'spendmoneytxn_uid': SMT}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/')
         self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.get, {'spendmoneytxn_uid': SMT, 'uid': ATT}, 'GET', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/{ATT}/')
         self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.delete, {'spendmoneytxn_uid': SMT, 'uid': ATT}, 'DELETE', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/{ATT}/')
         self.assertEndpointReached(self.companyfile.banking.spendmoneytxn.attachment.post, {'spendmoneytxn_uid': SMT, 'data': DATA}, 'POST', f'/{CID}/Banking/SpendMoneyTxn/{SMT}/Attachment/')
 
     def test_contacts(self):
         self.assertEqual(repr(self.companyfile.contacts), (
-            "ContactManager:\n"
-            "                      all() - Return all contact types for an AccountRight company file.\n"
-            "                 customer() - Return all customer contacts for an AccountRight company file.\n"
-            "       delete_customer(uid) - Delete selected customer contact.\n"
-            "       delete_employee(uid) - Delete selected employee card.\n"
-            "       delete_supplier(uid) - Delete selected supplier contact.\n"
-            "                 employee() - Return all employee cards for an AccountRight company file.\n"
-            "          get_customer(uid) - Return selected customer contact.\n"
-            "          get_employee(uid) - Return selected employee card.\n"
-            "          get_supplier(uid) - Return selected supplier contact.\n"
-            "        post_customer(data) - Create new customer contact.\n"
-            "        post_employee(data) - Create new employee card.\n"
-            "        post_supplier(data) - Create new supplier contact.\n"
-            "    put_customer(uid, data) - Update selected customer contact.\n"
-            "    put_employee(uid, data) - Update selected employee card.\n"
-            "    put_supplier(uid, data) - Update selected supplier contact.\n"
-            "                 supplier() - Return all supplier contacts for an AccountRight company file."
+            "ContactsManager:\n"
+            "    all() - Return all contact types for an AccountRight company file."
         ))
         self.assertEndpointReached(self.companyfile.contacts.all, {}, 'GET', f'/{CID}/Contact/')
-        self.assertEndpointReached(self.companyfile.contacts.customer, {}, 'GET', f'/{CID}/Contact/Customer/')
-        self.assertEndpointReached(self.companyfile.contacts.get_customer, {'uid': UID}, 'GET', f'/{CID}/Contact/Customer/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.put_customer, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Contact/Customer/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.post_customer, {'data': DATA}, 'POST', f'/{CID}/Contact/Customer/')
-        self.assertEndpointReached(self.companyfile.contacts.delete_customer, {'uid': UID}, 'DELETE', f'/{CID}/Contact/Customer/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.employee, {}, 'GET', f'/{CID}/Contact/Employee/')
-        self.assertEndpointReached(self.companyfile.contacts.get_employee, {'uid': UID}, 'GET', f'/{CID}/Contact/Employee/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.put_employee, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Contact/Employee/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.post_employee, {'data': DATA}, 'POST', f'/{CID}/Contact/Employee/')
-        self.assertEndpointReached(self.companyfile.contacts.delete_employee, {'uid': UID}, 'DELETE', f'/{CID}/Contact/Employee/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.supplier, {}, 'GET', f'/{CID}/Contact/Supplier/')
-        self.assertEndpointReached(self.companyfile.contacts.get_supplier, {'uid': UID}, 'GET', f'/{CID}/Contact/Supplier/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.put_supplier, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Contact/Supplier/{UID}/')
-        self.assertEndpointReached(self.companyfile.contacts.post_supplier, {'data': DATA}, 'POST', f'/{CID}/Contact/Supplier/')
-        self.assertEndpointReached(self.companyfile.contacts.delete_supplier, {'uid': UID}, 'DELETE', f'/{CID}/Contact/Supplier/{UID}/')
+
+    def test_contacts_customer(self):
+        self.assertEqual(repr(self.companyfile.contacts.customer), (
+            "CustomerManager:\n"
+            "             all() - Return all customer contacts for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected customer contact.\n"
+            "          get(uid) - Return selected customer contact.\n"
+            "        post(data) - Create new customer contact.\n"
+            "    put(uid, data) - Update selected customer contact."
+        ))
+        self.assertEndpointReached(self.companyfile.contacts.customer.all, {}, 'GET', f'/{CID}/Contact/Customer/')
+        self.assertEndpointReached(self.companyfile.contacts.customer.get, {'uid': UID}, 'GET', f'/{CID}/Contact/Customer/{UID}/')
+        self.assertEndpointReached(self.companyfile.contacts.customer.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Contact/Customer/{UID}/')
+        self.assertEndpointReached(self.companyfile.contacts.customer.post, {'data': DATA}, 'POST', f'/{CID}/Contact/Customer/')
+        self.assertEndpointReached(self.companyfile.contacts.customer.delete, {'uid': UID}, 'DELETE', f'/{CID}/Contact/Customer/{UID}/')
+
+    def test_contacts_employee(self):
+        self.assertEqual(repr(self.companyfile.contacts.employee), (
+            "EmployeeManager:\n"
+            "             all() - Return all employee cards for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected employee card.\n"
+            "          get(uid) - Return selected employee card.\n"
+            "        post(data) - Create new employee card.\n"
+            "    put(uid, data) - Update selected employee card."
+        ))
+        self.assertEndpointReached(self.companyfile.contacts.employee.all, {}, 'GET', f'/{CID}/Contact/Employee/')
+        self.assertEndpointReached(self.companyfile.contacts.employee.get, {'uid': UID}, 'GET', f'/{CID}/Contact/Employee/{UID}/')
+        self.assertEndpointReached(self.companyfile.contacts.employee.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Contact/Employee/{UID}/')
+        self.assertEndpointReached(self.companyfile.contacts.employee.post, {'data': DATA}, 'POST', f'/{CID}/Contact/Employee/')
+        self.assertEndpointReached(self.companyfile.contacts.employee.delete, {'uid': UID}, 'DELETE', f'/{CID}/Contact/Employee/{UID}/')
+
+    def test_contacts_supplier(self):
+        self.assertEqual(repr(self.companyfile.contacts.supplier), (
+            "SupplierManager:\n"
+            "             all() - Return all supplier contacts for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected supplier contact.\n"
+            "          get(uid) - Return selected supplier contact.\n"
+            "        post(data) - Create new supplier contact.\n"
+            "    put(uid, data) - Update selected supplier contact."
+        ))
+        self.assertEndpointReached(self.companyfile.contacts.supplier.all, {}, 'GET', f'/{CID}/Contact/Supplier/')
+        self.assertEndpointReached(self.companyfile.contacts.supplier.get, {'uid': UID}, 'GET', f'/{CID}/Contact/Supplier/{UID}/')
+        self.assertEndpointReached(self.companyfile.contacts.supplier.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/Contact/Supplier/{UID}/')
+        self.assertEndpointReached(self.companyfile.contacts.supplier.post, {'data': DATA}, 'POST', f'/{CID}/Contact/Supplier/')
+        self.assertEndpointReached(self.companyfile.contacts.supplier.delete, {'uid': UID}, 'DELETE', f'/{CID}/Contact/Supplier/{UID}/')
 
     def test_invoices(self):
         self.assertEqual(repr(self.companyfile.invoices), (
