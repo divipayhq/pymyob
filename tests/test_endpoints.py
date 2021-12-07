@@ -422,6 +422,76 @@ class EndpointTests(TestCase):
         self.assertEndpointReached(self.companyfile.general_ledger.delete_category, {'uid': UID}, 'DELETE', f'/{CID}/GeneralLedger/Category/{UID}/')
         self.assertEndpointReached(self.companyfile.general_ledger.journaltransaction, {}, 'GET', f'/{CID}/GeneralLedger/JournalTransaction/')
 
+    def test_general_ledger_taxcode(self):
+        self.assertEqual(repr(self.companyfile.general_ledger.taxcode), (
+            "TaxCodeManager:\n"
+            "             all() - Return all tax codes for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected tax code.\n"
+            "          get(uid) - Return selected tax code.\n"
+            "        post(data) - Create new tax code.\n"
+            "    put(uid, data) - Update selected tax code."
+        ))
+        self.assertEndpointReached(self.companyfile.general_ledger.taxcode.all, {}, 'GET', f'/{CID}/GeneralLedger/TaxCode/')
+        self.assertEndpointReached(self.companyfile.general_ledger.taxcode.get, {'uid': UID}, 'GET', f'/{CID}/GeneralLedger/TaxCode/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.taxcode.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/GeneralLedger/TaxCode/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.taxcode.post, {'data': DATA}, 'POST', f'/{CID}/GeneralLedger/TaxCode/')
+        self.assertEndpointReached(self.companyfile.general_ledger.taxcode.delete, {'uid': UID}, 'DELETE', f'/{CID}/GeneralLedger/TaxCode/{UID}/')
+
+    def test_general_ledger_account(self):
+        self.assertEqual(repr(self.companyfile.general_ledger.account), (
+            "AccountManager:\n"
+            "             all() - Return all accounts for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected account.\n"
+            "          get(uid) - Return selected account.\n"
+            "        post(data) - Create new account.\n"
+            "    put(uid, data) - Update selected account."
+        ))
+        self.assertEndpointReached(self.companyfile.general_ledger.account.all, {}, 'GET', f'/{CID}/GeneralLedger/Account/')
+        self.assertEndpointReached(self.companyfile.general_ledger.account.get, {'uid': UID}, 'GET', f'/{CID}/GeneralLedger/Account/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.account.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/GeneralLedger/Account/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.account.post, {'data': DATA}, 'POST', f'/{CID}/GeneralLedger/Account/')
+        self.assertEndpointReached(self.companyfile.general_ledger.account.delete, {'uid': UID}, 'DELETE', f'/{CID}/GeneralLedger/Account/{UID}/')
+
+    def test_general_ledger_category(self):
+        self.assertEqual(repr(self.companyfile.general_ledger.category), (
+            "CategoryManager:\n"
+            "             all() - Return all cost center tracking categories for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected cost center tracking category.\n"
+            "          get(uid) - Return selected cost center tracking category.\n"
+            "        post(data) - Create new cost center tracking category.\n"
+            "    put(uid, data) - Update selected cost center tracking category."
+        ))
+        self.assertEndpointReached(self.companyfile.general_ledger.category.all, {}, 'GET', f'/{CID}/GeneralLedger/Category/')
+        self.assertEndpointReached(self.companyfile.general_ledger.category.get, {'uid': UID}, 'GET', f'/{CID}/GeneralLedger/Category/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.category.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/GeneralLedger/Category/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.category.post, {'data': DATA}, 'POST', f'/{CID}/GeneralLedger/Category/')
+        self.assertEndpointReached(self.companyfile.general_ledger.category.delete, {'uid': UID}, 'DELETE', f'/{CID}/GeneralLedger/Category/{UID}/')
+
+    def test_general_ledger_job(self):
+        self.assertEqual(repr(self.companyfile.general_ledger.job), (
+            "JobManager:\n"
+            "             all() - Return all jobs for an AccountRight company file.\n"
+            "       delete(uid) - Delete selected job.\n"
+            "          get(uid) - Return selected job.\n"
+            "        post(data) - Create new job.\n"
+            "    put(uid, data) - Update selected job."
+        ))
+        self.assertEndpointReached(self.companyfile.general_ledger.job.all, {}, 'GET', f'/{CID}/GeneralLedger/Job/')
+        self.assertEndpointReached(self.companyfile.general_ledger.job.get, {'uid': UID}, 'GET', f'/{CID}/GeneralLedger/Job/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.job.put, {'uid': UID, 'data': DATA}, 'PUT', f'/{CID}/GeneralLedger/Job/{UID}/')
+        self.assertEndpointReached(self.companyfile.general_ledger.job.post, {'data': DATA}, 'POST', f'/{CID}/GeneralLedger/Job/')
+        self.assertEndpointReached(self.companyfile.general_ledger.job.delete, {'uid': UID}, 'DELETE', f'/{CID}/GeneralLedger/Job/{UID}/')
+
+    def test_general_ledger_journaltransaction(self):
+        self.assertEqual(repr(self.companyfile.general_ledger.journaltransaction), (
+            "JournalTransactionManager:\n"
+            "       all() - Return all transaction journals for an AccountRight company file.\n"
+            "    get(uid) - Return selected transaction journal."
+        ))
+        self.assertEndpointReached(self.companyfile.general_ledger.journaltransaction.all, {}, 'GET', f'/{CID}/GeneralLedger/JournalTransaction/')
+        self.assertEndpointReached(self.companyfile.general_ledger.journaltransaction.get, {'uid': UID}, 'GET', f'/{CID}/GeneralLedger/JournalTransaction/{UID}/')
+
+
     def test_inventory(self):
         self.assertEqual(repr(self.companyfile.inventory), (
             "InventoryManager:\n"

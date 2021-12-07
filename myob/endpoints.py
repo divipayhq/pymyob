@@ -117,17 +117,37 @@ ENDPOINTS = {
             }
         }
     },
-    # 'GeneralLedger/': {
-    #     'name': 'general_ledger',
-    #     'methods': [
-    #         (CRUD, 'TaxCode/', 'tax code'),
-    #         (CRUD, 'Account/', 'account'),
-    #         (CRUD, 'Category/', 'cost center tracking category'),
-    #         (CRUD, 'Job/', 'job'),
-    #         (ALL, 'JournalTransaction/', 'transaction journal'),
-    #         (GET, 'JournalTransaction/', 'transaction journal'),
-    #     ]
-    # },
+    'GeneralLedger/': {
+        'name': 'general_ledger',
+        'hint': 'general ledger',
+        'resources': {
+            'TaxCode/': {
+                'name': 'TaxCode',
+                'hint': 'tax code',
+                'methods': [CRUD]
+            },
+            'Account/': {
+                'name': 'Account',
+                'hint': 'account',
+                'methods': [CRUD]
+            },
+            'Category/': {
+                'name': 'Category',
+                'hint': 'cost center tracking category',
+                'methods': [CRUD]
+            },
+            'Job/': {
+                'name': 'Job',
+                'hint': 'job',
+                'methods': [CRUD]
+            },
+            'JournalTransaction/': {
+                'name': 'JournalTransaction',
+                'hint': 'transaction journal',
+                'methods': [ALL, GET]
+            }
+        },
+    },
     # 'Inventory/': {
     #     'name': 'inventory',
     #     'methods': [
