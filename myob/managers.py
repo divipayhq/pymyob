@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 
 import requests
 
