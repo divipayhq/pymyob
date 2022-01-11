@@ -1,8 +1,7 @@
 import re
+import requests
 from datetime import date
 from typing import Dict, List, Optional
-
-import requests
 
 from .constants import DEFAULT_PAGE_SIZE
 from .credentials import PartnerCredentials
