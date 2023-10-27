@@ -2,9 +2,13 @@ class MyobException(Exception):
     def __init__(self, response, msg=None):
         self.response = response
         try:
-            self.errors = response.json()['Errors']
+            self.errors = response.json()["Errors"]
             e = self.errors[0]
-            self.problem = '%s: %s %s' % (e['Name'], e['Message'] or '', e['AdditionalDetails'])
+            self.problem = "%s: %s %s" % (
+                e["Name"],
+                e["Message"] or "",
+                e["AdditionalDetails"],
+            )
         except Exception:
             self.errors = []
             self.problem = response.reason
@@ -33,6 +37,16 @@ class MyobRateLimitExceeded(MyobForbidden):
 
 class MyobNotFound(MyobException):
     # HTTP 404: Not Found
+    pass
+
+
+class MyobConflict(MyobException):
+    # HTTP 409: Conflict
+    pass
+
+
+class MyobInternalServerError(MyobException):
+    # HTTP 500: Internal Server Error
     pass
 
 

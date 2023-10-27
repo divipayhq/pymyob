@@ -1,11 +1,12 @@
 # PyMYOB
+
 [![PyPI version](https://badge.fury.io/py/pymyob.svg)](https://pypi.org/project/pymyob)
 [![versions](https://img.shields.io/pypi/pyversions/pymyob.svg)](https://pypi.org/project/pymyob)
-[![Downloads](https://pepy.tech/badge/pymyob)](https://pepy.tech/project/pymyob)
+[![Downloads](https://static.pepy.tech/badge/pymyob/month)](https://pepy.tech/project/pymyob)
 [![Test](https://github.com/uptick/pymyob/workflows/Test/badge.svg)](https://github.com/uptick/pymyob/actions?query=workflow%3ATest)
 [![Lint](https://github.com/uptick/pymyob/workflows/Lint/badge.svg)](https://github.com/uptick/pymyob/actions?query=workflow%3ALint)
 
-A Python API around [MYOB's AccountRight and Essentials APIs](http://developer.myob.com/api/accountright/v2/).
+A Python API around the [MYOB Business API](https://developer.myob.com/api/myob-business-api/v2/) (formerly AccountRight Live, and New Essentials).
 
 ## Pre-getting started
 
@@ -14,11 +15,13 @@ Register for API Keys with MYOB. You'll find detailed instructions [here](http:/
 ## Getting started
 
 Install:
+
 ```
 pip install pymyob
 ```
 
 Create a `PartnerCredentials` instance and provide the Key, Secret and Redirect Uri as you've set up in MYOB:
+
 ```
 from myob.credentials import PartnerCredentials
 
@@ -30,9 +33,12 @@ cred = PartnerCredentials(
 ```
 
 Cache `cred.state` somewhere. You'll use this to rebuild the `PartnerCredentials` instance later.
+This object includes a datetime object, so if your cache does not serialise datetime objects, you'll need to find an alternative, such as pickling and saving to a binary database column.
+
 Redirect the user to `cred.url`. There, they will need to log in to MYOB and authorise partnership with your app<sup id="a1">[1](#f1)</sup>. Once they do, they'll be redirected to the Redirect Uri you supplied.
 
 At the url they're redirected to, rebuild the `PartnerCredentials` then pick the verifier out of the request and use it to verify the credentials.
+
 ```
 from myob.credentials import PartnerCredentials
 
@@ -56,6 +62,7 @@ def myob_authorisation_complete_view(request):
 Save `cred.state` once more, but this time you want it in persistent storage. So plonk it somewhere in your database.
 
 With your application partnered with MYOB, you can now create a `Myob` instance, supplying the verified credentials:
+
 ```
 from myob import Myob
 from myob.credentials import PartnerCredentials
@@ -65,6 +72,7 @@ myob = Myob(cred)
 ```
 
 You're almost there! MYOB has this thing called company files. Even though you've authorised against a user now, you need to collect a further set of credentials for getting into the company file.
+
 ```
 companyfiles = myob.companyfiles.all()
 
@@ -73,8 +81,11 @@ comp.id  # Company Id
 comp.name  # Company Name
 comp.data  # Remaining data as a raw dict.
 ```
+Tip: the companyfiles object specifies all supported managers (that is, endpoints).
 
-Render a dropdown for your user to let them select which of the company files they wish to use. Usually there will only be one against their account, but best to check. Once they've selected, prompt them for the username and password for that company file. Save this as follows:
+Render a dropdown for your user to let them select which of the company files they wish to use. Usually there will only be one against their account, but best to check.
+If additional authentication against the company file is needed (ie when the company file account isn't tied via SSO to a my.myob account), prompt them for the username and password for that company file and save this as follows:
+
 ```
 cred.authenticate_companyfile(<company_id>, <username>, <password>)
 ```
@@ -82,6 +93,7 @@ cred.authenticate_companyfile(<company_id>, <username>, <password>)
 Save the new `cred.state` back to your persistent storage.
 
 Now you can access stuff!
+
 ```
 from myob import Myob
 from myob.credentials import PartnerCredentials
